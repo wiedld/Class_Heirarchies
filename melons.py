@@ -19,7 +19,7 @@ class SquareMelon(AbstractMelon):
         self.shape = "square"
         self.pricetag = self.pricetag * 2   # 10
     def get_price(self,qty):
-        return super(SquareMelon,self).get_price(qty,self.pricetag)
+        return self.pricetag*qty
 
 class ImportedMelon(AbstractMelon):
     def __init__(self, melon_type):
@@ -28,27 +28,65 @@ class ImportedMelon(AbstractMelon):
         self.imported = True   
         self.pricetag = self.pricetag * 1.5     # 7.5
     def get_price(self,qty):
-        return super(ImportedMelon,self).get_price(qty,self.pricetag)
+        return self.pricetag*qty
 
-class Xigua(SquareMelon):
+
+########## INDIVIDUAL MELON, PARENT: ABSTRACT ##########
+class Ogen(AbstractMelon):
+    def __init__(self, melon_type="Ogen"):
+        super(Ogen,self).__init__(melon_type)
+    # Ogen specific attributes:
+        self.pricetag = self.pricetag + 1
+        self.color = "tan"
+        self.seasons = ['Spring', 'Summer']
+    def get_price(self,qty):
+        return self.pricetag*qty
+
+
+########## INDIVIDUAL MELON, SINGLE PARENT (IMPORTED) ##########
+class Sharlyn(ImportedMelon):
+    def __init__(self, melon_type="Sharlyn"):
+        super(Sharlyn,self).__init__(melon_type)
+    # Sharlyn specific attributes:
+        self.color = "tan"
+        self.seasons = ['Summer']
+    # can use parent get_price(), since pricetag does not change
+
+
+########## INDIVIDUAL MELON, PARENT: ABSTRACT, special pricing ##########
+class Watermelon(AbstractMelon):
+    def __init__(self, melon_type="Watermelon"):
+        super(Watermelon,self).__init__(melon_type)
+    # Watermelon specific attributes:
+        self.color = "green"
+        self.seasons = ['Fall','Summer']
+    def get_price(self,qty):
+        if qty >=3:
+            return self.pricetag*qty*0.75
+        else: 
+            return self.pricetag*qty  
+         
+class Cantaloupe(AbstractMelon):
+    def __init__(self, melon_type="Cantaloupe"):
+        super(Cantaloupe,self).__init__(melon_type)
+    # Cantaloupe specific attributes:
+        self.color = "tan"
+        self.seasons = ['Spring','Summer']
+    def get_price(self,qty):
+        if qty >=5:
+            return self.pricetag*qty*0.5
+        else: 
+            return self.pricetag*qty
+
+
+########## INDIVIDUAL MELON, MULTIPLE PARENTS ##########
+class Xigua(SquareMelon,ImportedMelon):
     def __init__(self, melon_type="Xigua"):
         super(Xigua,self).__init__(melon_type)
-        # Xigua is square and imported. Reset price tag.
-        self.pricetag = self.pricetag * 1.5     # 15
-        # Xigua has other specific attributes of color and seasons.
-        self.color = "black"
-        self.seasons = ['Summer']
-
-class Xigua2(SquareMelon,ImportedMelon):
-    def __init__(self, melon_type="Xigua"):
-        super(Xigua2,self).__init__(melon_type)
         # the two class, with the self.pricetag=self.pricetag * modifier
-            #outcome should be pricetag = 15
-        # Xigua has other specific attributes of color and seasons.
+            # outcome should be pricetag = 15
+        # Xigua specific attributes:
         self.color = "black"
         self.seasons = ['Summer']
-
-## TODO:  separate class per each type of melon?
-## TODO:  how can do dual-class?  imported and square?
-
-
+    def get_price(self,qty):
+        return self.pricetag*qty
